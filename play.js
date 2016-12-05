@@ -37,36 +37,41 @@ Game.prototype.checkForWinner = function() {
 }
 
 Game.prototype.start = function() {
-  console.log('This is the board:');
-  this.printBoard();
+  console.log('Welcome to Tic Tac Toe!');
   console.log('Input moves in format > [row, col]');
-  console.log('e.g. [0, 1]');
+  console.log('e.g. [0, 1], by this indexing scheme:');
   console.log('[0, 1, 2]');
   console.log('[1,  ,  ]');
   console.log('[2,  ,  ]');
 
-  // while (!this.isWinner) {
-    console.log('Player X, it is your turn');
-    prompt.start();
-    var player = 0;
+  var promptForMove = player => {
+    if (this.isWinner) {
+      return;
+    }
     prompt.get(['move'], (err, result) => {
       var move = JSON.parse(result['move']);
-      this.markBoard(this.players[0], move);
+      if (!this.markBoard(this.players[player], move)) {
+        console.log('that square has already been played');
+      }
       this.printBoard();
+
+      if (player) {
+        player = 0;
+      } else {
+        player = 1;
+      }
+
+      promptForMove(player);
     });
-    if (player) {
-      player = 0;
-    } else {
-      player = 1;
-    }
-  // }
+  }
+
+  var player = 0;
+  console.log('Player', this.players[player], ', it is your turn');
+  prompt.start();
+
+  promptForMove(player);
 
 }
 
 var newGame = new Game();
 newGame.start();
-
-
-// console.log('__|__|__');
-// console.log('__|__|__');
-// console.log('  |  |  ');
