@@ -4,7 +4,7 @@
   "description": "",
   "main": "play.js",
   "scripts": {
-    "start": "nodemon play.js",
+    "start": "node play.js",
     "test": "mocha test"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "dependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "prompt": "^1.0.0"
   }
 }
