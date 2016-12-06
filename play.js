@@ -7,7 +7,7 @@ var Game = function() {
     [null, null, null],
     [null, null, null]
   ];
-  this.isWinner = false;
+  this.winner = '';
 }
 
 Game.prototype.printBoard = function() {
@@ -34,6 +34,26 @@ Game.prototype.markBoard = function(player, move) {
 
 Game.prototype.checkForWinner = function() {
   //if any rows of 3 of either Xs or Os, return true
+  //check rows and columns
+  for (var i = 0; i < this.board.length; i++) {
+    if (this.board[i].reduce((same, cur) => same === cur ? same : null) ||
+      (this.board[0][i] === this.board[1][i] && this.board[1][i] === this.board[2][i])) {
+      if (this.board[i][i] === null) {
+        return false;
+      }
+      this.winner = this.board[i][i];
+      return true;
+    }
+  }
+  //check diagonals
+  if ((this.board[0][0] === this.board[1][1] && this.board[1][1] === this.board[2][2]) || 
+    (this.board[2][0] === this.board[1][1] && this.board[1][1] === this.board[0][2])) {
+    if (this.board[1][1] === null) {
+        return false;
+      }
+    this.winner = this.board[1][1];
+    return true;
+  }
 }
 
 Game.prototype.start = function() {
@@ -45,13 +65,19 @@ Game.prototype.start = function() {
   console.log('[2,  ,  ]');
 
   var promptForMove = player => {
-    if (this.isWinner) {
+    if (this.checkForWinner()) {
+      console.log('PLAYER', this.winner, 'IS THE WINNER! :D')
       return;
     }
+    console.log('Player', this.players[player], ', it is your turn');
     prompt.get(['move'], (err, result) => {
-      var move = JSON.parse(result['move']);
-      if (!this.markBoard(this.players[player], move)) {
-        console.log('that square has already been played');
+      try {
+        var move = JSON.parse(result['move']);
+      } catch (e) {
+
+      }
+      if (!Array.isArray(move) || !this.markBoard(this.players[player], move)) {
+        console.log('Invalid input (that square may already be taken)');
       }
       this.printBoard();
 
@@ -66,7 +92,7 @@ Game.prototype.start = function() {
   }
 
   var player = 0;
-  console.log('Player', this.players[player], ', it is your turn');
+  
   prompt.start();
 
   promptForMove(player);
