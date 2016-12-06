@@ -57,12 +57,12 @@ Game.prototype.checkForWinner = function() {
 }
 
 Game.prototype.start = function() {
-  console.log('Welcome to Tic Tac Toe!');
-  console.log('Input moves in format > [row, col]');
+  console.log('Welcome to Tic Tac Toe!\n');
+  console.log('Type your moves in this format: [row, col]');
   console.log('e.g. [0, 1], by this indexing scheme:');
   console.log('[0, 1, 2]');
   console.log('[1,  ,  ]');
-  console.log('[2,  ,  ]');
+  console.log('[2,  ,  ]\n');
 
   var promptForMove = player => {
     if (this.checkForWinner()) {
@@ -77,15 +77,18 @@ Game.prototype.start = function() {
 
       }
       if (!Array.isArray(move) || !this.markBoard(this.players[player], move)) {
-        console.log('Invalid input (that square may already be taken)');
+        console.log('\n***Invalid input or square is already taken***');
+        console.log('Remember the format should be [row, col]');
+        console.log('You may try again...\n');
+      } else {
+        if (player) {
+          player = 0;
+        } else {
+          player = 1;
+        }
       }
       this.printBoard();
-
-      if (player) {
-        player = 0;
-      } else {
-        player = 1;
-      }
+      console.log('');
 
       promptForMove(player);
     });
